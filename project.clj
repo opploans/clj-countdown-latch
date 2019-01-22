@@ -1,4 +1,4 @@
-(defproject opploans/clj-countdown-latch "0.1.2"
+(defproject opploans/clj-countdown-latch "0.1.3"
   :description "Execute code in parallel and wait for all executions to finish"
   :url "https://github.com/opploans/clj-countdown-latch"
   :license {:name "EPL-2.0 OR GPL-2.0-or-later WITH Classpath-exception-2.0"

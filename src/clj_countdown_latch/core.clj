@@ -42,7 +42,7 @@
          :async? false
          :fn (fn [data] (async-as-necessary ((:fn appender-config) data)))))
 
-(defn- wrap-ring [timeout-ms handler]
+(defn wrap-ring [timeout-ms handler]
   (fn [request] (with-countdown-latch timeout-ms (handler request))))
 
 (comment
