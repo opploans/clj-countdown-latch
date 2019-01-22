@@ -34,6 +34,14 @@
   [timeout-ms & body]
   `(with-countdown-latch* ~timeout-ms (fn [] ~@body)))
 
+(defn wrap-timbre-appender
+  "Reconfigures a timbre appender to use the countdown latch for its async
+  processing instead of the built-in approach"
+  [appender-config]
+  (assoc appender-config
+         :async? false
+         :fn (fn [data] (async-as-necessary ((:fn appender-config) data)))))
+
 (comment
  (defn- do-lots-of-things []
    (dotimes [x 50]
