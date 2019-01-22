@@ -5,7 +5,8 @@
 
 (defn async-as-necessary*
   "Execute the given function asynchronously, but only if we are in the context
-   of a `with-countdown-latch*`"
+   of a `with-countdown-latch*`. Exceptions are not handled. If you want to see
+   stack traces, the code you send to this function must catch and handle them."
   [f]
   (if executor (.submit executor f) (f)))
 
@@ -16,8 +17,10 @@
 
 (defn with-countdown-latch*
   "Execute the given body with all log statements being executed asynchonously.
-   Before the body is able to return, we will wait for all async logging events
-   to complete."
+   Before the body is able to return, we will wait for all async events
+   to complete. Using a Java-based Cached Thread Pool so we don't allow any
+   events to block others, or waste memory creating new threads when we don't
+   need to. See https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/Executors.html#newCachedThreadPool()"
   [timeout-ms f]
   (binding [executor (Executors/newCachedThreadPool)]
     (try
