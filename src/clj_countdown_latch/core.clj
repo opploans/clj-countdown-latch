@@ -16,7 +16,7 @@
   `(async-as-necessary* (fn [] ~@body)))
 
 (defn with-countdown-latch*
-  "Execute the given body with all log statements being executed asynchonously.
+  "Execute the given body with an executor to support async execution.
    Before the body is able to return, we will wait for all async events
    to complete. Using a Java-based Cached Thread Pool so we don't allow any
    events to block others, or waste memory creating new threads when we don't
@@ -29,6 +29,8 @@
         (when-not
          (do (.shutdown executor)
              (.awaitTermination executor timeout-ms TimeUnit/MILLISECONDS))
+
+          ;;todo this should probably be a callback
           (println "Timed out waiting for log statements to finish"))))))
 
 (defmacro with-countdown-latch
@@ -45,7 +47,10 @@
          :async? false
          :fn (fn [data] (async-as-necessary ((:fn appender-config) data)))))
 
-(defn wrap-ring [timeout-ms handler]
+(defn wrap-ring 
+  "Provides a ring middleware that wraps an execution path in a countdown
+   latch"
+  [timeout-ms handler]
   (fn [request] (with-countdown-latch timeout-ms (handler request))))
 
 (comment
