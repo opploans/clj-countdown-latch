@@ -31,7 +31,7 @@
              (.awaitTermination executor timeout-ms TimeUnit/MILLISECONDS))
 
           ;;todo this should probably be a callback
-          (println "Timed out waiting for log statements to finish"))))))
+          (println "Timed out waiting for threads to finish"))))))
 
 (defmacro with-countdown-latch
   "Dispatch the given body as a function sent to `with-countdown-latch*`
