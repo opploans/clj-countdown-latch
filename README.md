@@ -2,7 +2,7 @@
 
 Execute things asynchronously and wait for them all to finish before returning.
 
-## Exmaple Usage
+## Example Usage
 
 ```
 (require '[clj-countdown-latch.core :as cc])
